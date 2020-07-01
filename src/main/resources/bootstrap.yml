@@ -1,0 +1,59 @@
+server:
+  error:
+    include-stacktrace: never
+  port: 8081
+
+spring:
+  application:
+    name: cf-msa-auth
+  profiles:
+    active: local
+
+---
+spring:
+  profiles: dev
+
+  cloud:
+    config:
+      uri: http://msa-config.cf.intl
+
+---
+spring:
+  profiles: local
+
+  cloud:
+    config:
+      enabled: false
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/auth?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    username: auth
+    password: koscom
+#    initialization-mode: always
+
+#  h2:
+#    console:
+#      enabled: true
+#      settings:
+#        web-allow-others: true
+
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:auth
+#    username: auth
+#    password: koscom
+
+config:
+  oauth2:
+    url: http://localhost:8081/oauth/token
+    clientId: jmworks
+    clientSecret: jmworksOauthSecret
+    jwt-signkey: jmworksJwtSecret
+  swagger:
+    enabled: true
