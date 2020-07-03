@@ -1,4 +1,4 @@
-package com.jmworks.auth.security;
+package com.jmworks.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

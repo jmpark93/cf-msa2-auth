@@ -1,5 +1,6 @@
-package com.jmworks.auth.security;
+package com.jmworks.auth.config;
 
+import com.jmworks.auth.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

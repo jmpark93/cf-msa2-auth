@@ -9,6 +9,8 @@ import com.jmworks.auth.payload.MessageResponse;
 import com.jmworks.auth.payload.SignupRequest;
 import com.jmworks.auth.repository.RoleRepository;
 import com.jmworks.auth.repository.UserRepository;
+import com.jmworks.auth.service.S3Service;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +24,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,6 +58,9 @@ public class AuthController {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    S3Service s3Service;
 
     @Autowired
     PasswordEncoder encoder;
@@ -110,8 +117,15 @@ public class AuthController {
                 roles));
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    @PostMapping(value = "/signup", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<?> registerUser(
+            @RequestParam(value = "profile", required = true) @Valid String jsonSignup,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
+    ) throws IOException {
+        String accessURL = "";
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        SignupRequest signUpRequest = objectMapper.readValue(jsonSignup, SignupRequest.class);
 
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
@@ -155,6 +169,17 @@ public class AuthController {
         }
 
         user.setRoles(roles);
+
+        // 사용자 프로파일 이미지 --> Upload (minio : S3)
+        if(imageFile != null ) {
+            accessURL =  s3Service.uploadFile(imageFile, signUpRequest.getUsername() );
+            user.setImageURL(accessURL);
+
+            String sourceFileName = imageFile.getOriginalFilename();
+            System.out.println("Original File Name : " + sourceFileName);
+            System.out.println("Access URL : " + accessURL);
+        }
+
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

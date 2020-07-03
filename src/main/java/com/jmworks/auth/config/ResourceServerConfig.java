@@ -1,5 +1,6 @@
-package com.jmworks.auth.security;
+package com.jmworks.auth.config;
 
+import com.jmworks.auth.security.AuthEntryPointJwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
