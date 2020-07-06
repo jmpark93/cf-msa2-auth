@@ -98,16 +98,11 @@ public class AuthController {
 
         JSONObject jsonObject = new JSONObject(response.getBody());
 
-//        System.out.println(jsonObject.getString("access_token"));
-
         OAuth2Authentication auth = jwtTokenStore.readAuthentication(jsonObject.getString("access_token"));
 
         List<String> roles = auth.getUserAuthentication().getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-
-//        System.out.println(roles);
-//        System.out.println(auth.getUserAuthentication().getName());
 
         return ResponseEntity.ok(new JwtResponse(
                 jsonObject.getString("access_token"),
@@ -136,7 +131,8 @@ public class AuthController {
         // Create new user's account
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+                encoder.encode(signUpRequest.getPassword()),
+                signUpRequest.getFullname());
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
