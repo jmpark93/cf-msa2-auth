@@ -104,11 +104,19 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
+        Object imageURL = jsonObject.get("imageURL");
+        String strImageURL = "";
+        if( imageURL != JSONObject.NULL ) {
+            strImageURL = (String) imageURL;
+        }
+
+//        String imageURL =
         return ResponseEntity.ok(new JwtResponse(
                 jsonObject.getString("access_token"),
-                jsonObject.getLong("user_id"),
+                jsonObject.getLong("id"),
                 loginRequest.getUsername(),
-                jsonObject.getString("user_email"),
+                jsonObject.getString("email"),
+                strImageURL,
                 roles));
     }
 

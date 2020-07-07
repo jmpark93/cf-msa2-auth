@@ -16,8 +16,11 @@ public class CustomTokenEnhancer implements TokenEnhancer {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
         final Map<String, Object> additionalInfo = new HashMap<String, Object>();
-        additionalInfo.put("user_id", userDetails.getId());
-        additionalInfo.put("user_email", userDetails.getEmail());
+
+        additionalInfo.put("id", userDetails.getId());
+        additionalInfo.put("email", userDetails.getEmail());
+        additionalInfo.put("imageURL", userDetails.getImageURL());
+
         ((DefaultOAuth2AccessToken) accessToken)
                 .setAdditionalInformation(additionalInfo);
 

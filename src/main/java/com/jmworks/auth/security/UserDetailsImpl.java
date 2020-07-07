@@ -16,12 +16,10 @@ public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-
     private String username;
-
     private String email;
-
     private String password;
+    private String imageURL;
 
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -35,6 +33,7 @@ public class UserDetailsImpl implements UserDetails {
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
+                user.getImageURL(),
                 authorities);
     }
 
@@ -49,6 +48,10 @@ public class UserDetailsImpl implements UserDetails {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getImageURL() {
+        return imageURL;
     }
 
     @Override
