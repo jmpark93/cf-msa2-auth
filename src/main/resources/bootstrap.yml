@@ -21,9 +21,20 @@ spring:
 spring:
   profiles: local
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: adminSecret
+
   cloud:
     config:
       enabled: false
+    stream:
+      bindings:
+        input:
+          destination: mgmt
+          group: mgmt-group
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -48,6 +59,7 @@ spring:
 #    url: jdbc:h2:mem:auth
 #    username: auth
 #    password: koscom
+
 
 config:
   oauth2:

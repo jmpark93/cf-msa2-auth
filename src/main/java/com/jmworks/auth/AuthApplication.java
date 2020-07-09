@@ -8,6 +8,9 @@ import com.jmworks.auth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +18,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+@EnableBinding(Sink.class)
 @SpringBootApplication
 public class AuthApplication {
 
@@ -57,5 +61,10 @@ public class AuthApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(AuthApplication.class, args);
+    }
+
+    @StreamListener(target = Sink.INPUT)
+    public void processMessage(String msg) {
+        System.out.println(msg);
     }
 }
