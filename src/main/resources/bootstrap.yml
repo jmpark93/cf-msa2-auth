@@ -5,7 +5,7 @@ server:
 
 spring:
   application:
-    name: cf-msa-auth
+    name: cf-msa2-auth
   profiles:
     active: local
 

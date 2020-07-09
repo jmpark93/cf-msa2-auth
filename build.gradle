@@ -33,9 +33,7 @@ dependencies {
 
     implementation 'org.springframework.cloud:spring-cloud-starter-oauth2'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
-//    implementation 'org.springframework.cloud:spring-cloud-stream-binder-rabbit'
     implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
-
 
     implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.815')
     implementation 'com.amazonaws:aws-java-sdk-s3'

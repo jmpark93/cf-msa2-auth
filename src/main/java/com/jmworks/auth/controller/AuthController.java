@@ -106,7 +106,7 @@ public class AuthController {
 
         Object imageURL = jsonObject.get("imageURL");
         String strImageURL = "";
-        if( imageURL != JSONObject.NULL ) {
+        if (imageURL != JSONObject.NULL) {
             strImageURL = (String) imageURL;
         }
 
@@ -120,7 +120,7 @@ public class AuthController {
                 roles));
     }
 
-    @PostMapping(value = "/signup", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(value = "/signup", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> registerUser(
             @RequestParam(value = "profile", required = true) @Valid String jsonSignup,
             @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
@@ -175,8 +175,8 @@ public class AuthController {
         user.setRoles(roles);
 
         // 사용자 프로파일 이미지 --> Upload (minio : S3)
-        if(imageFile != null ) {
-            accessURL =  s3Service.uploadFile(imageFile, signUpRequest.getUsername() );
+        if (imageFile != null) {
+            accessURL = s3Service.uploadFile(imageFile, signUpRequest.getUsername());
             user.setImageURL(accessURL);
 
             String sourceFileName = imageFile.getOriginalFilename();
@@ -187,5 +187,13 @@ public class AuthController {
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable String id) {
+
+        System.out.println( id + " will be deleted ... ");
+
+        return ResponseEntity.ok(new MessageResponse("OK ... "));
     }
 }
