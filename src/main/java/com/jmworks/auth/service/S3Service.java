@@ -38,9 +38,13 @@ public class S3Service {
 
         s3Client.putObject( new PutObjectRequest( bucket, toFileName + "." + extention , file.getInputStream(), omd));
 
-        accessURL = s3URL + "/" + bucket + "/" + toFileName + "." + extention;
+        accessURL = toFileName + "." + extention;
         System.out.println( accessURL );
 
         return accessURL;
+    }
+
+    public void deleteFile(String imageURL) {
+        s3Client.deleteObject( bucket, imageURL);
     }
 }

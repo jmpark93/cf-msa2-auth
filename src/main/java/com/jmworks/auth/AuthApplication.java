@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-@EnableBinding(Sink.class)
 @SpringBootApplication
 public class AuthApplication {
 
@@ -61,10 +60,5 @@ public class AuthApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(AuthApplication.class, args);
-    }
-
-    @StreamListener(target = Sink.INPUT)
-    public void processMessage(String msg) {
-        System.out.println(msg);
     }
 }

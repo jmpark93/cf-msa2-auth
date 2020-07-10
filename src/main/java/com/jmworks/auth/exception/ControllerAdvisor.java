@@ -20,12 +20,13 @@ import java.util.stream.Collectors;
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Object> handleCityNotFoundException(
+    public ResponseEntity<Object> handleUserNotFoundException(
             UserNotFoundException ex, WebRequest request) {
 
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("message", "User not found");
+//        body.put("message", "User not found");
+        body.put("message", ex.getMessage());
 
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }

@@ -32,9 +32,22 @@ spring:
       enabled: false
     stream:
       bindings:
-        input:
-          destination: mgmt
-          group: mgmt-group
+        output:
+          destination: msa2.mgmt
+          contentType: application/json
+#          group: user
+#          binder: msa2_rabbit
+#      binders:
+#        msa2_rabbit:
+#          type: rabbit
+#          environment:
+#            spring:
+#              rabbitmq:
+#                host: localhost
+#                port: 5672
+#                username: JMWorks
+#                password: JMWorksSecret
+#                virtual-host: /
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect

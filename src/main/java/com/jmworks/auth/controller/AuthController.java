@@ -14,7 +14,12 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.http.*;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -46,6 +51,12 @@ public class AuthController {
 
     @Value("${config.oauth2.url}")
     private String oauthURL;
+
+    @Value("${s3.bucket}")
+    String bucket;
+
+    @Value("${s3.endpoint}")
+    String s3URL;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -107,7 +118,7 @@ public class AuthController {
         Object imageURL = jsonObject.get("imageURL");
         String strImageURL = "";
         if (imageURL != JSONObject.NULL) {
-            strImageURL = (String) imageURL;
+            strImageURL = s3URL + "/" + bucket + "/" + imageURL;
         }
 
 //        String imageURL =
@@ -174,26 +185,24 @@ public class AuthController {
 
         user.setRoles(roles);
 
+        User savedUser = userRepository.save(user);
+
         // 사용자 프로파일 이미지 --> Upload (minio : S3)
         if (imageFile != null) {
-            accessURL = s3Service.uploadFile(imageFile, signUpRequest.getUsername());
+
+            System.out.println("Saved User ID (" + user.getUsername() +") : " + savedUser.getId()) ;
+            user.setId( savedUser.getId() );
+
+            accessURL = s3Service.uploadFile(imageFile, savedUser.getId() + "-" + signUpRequest.getUsername());
             user.setImageURL(accessURL);
 
             String sourceFileName = imageFile.getOriginalFilename();
             System.out.println("Original File Name : " + sourceFileName);
             System.out.println("Access URL : " + accessURL);
+
+            userRepository.save(user);
         }
 
-        userRepository.save(user);
-
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-    }
-
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable String id) {
-
-        System.out.println( id + " will be deleted ... ");
-
-        return ResponseEntity.ok(new MessageResponse("OK ... "));
     }
 }

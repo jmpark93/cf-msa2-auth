@@ -2,6 +2,7 @@ package com.jmworks.auth.security;
 
 import com.jmworks.auth.domain.User;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
+
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -28,13 +30,15 @@ public class UserDetailsImpl implements UserDetails {
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
 
-        return new UserDetailsImpl(
+        UserDetailsImpl userDetails = new UserDetailsImpl(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
                 user.getImageURL(),
                 authorities);
+
+        return userDetails;
     }
 
     @Override
