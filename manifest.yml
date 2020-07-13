@@ -1,6 +1,6 @@
 ---
 applications:
-  - name: cf-msa-auth
+  - name: cf-msa2-auth
     memory: 768MB
     instances: 1
     buildpacks:
@@ -10,7 +10,7 @@ applications:
       JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+}}'
       SPRING_PROFILES_ACTIVE: dev
     services:
-      - msa-auth
+      - msa2-auth
     routes:
-      - route: msa-auth.kpaasta.io
-      - route: msa-auth.cf.intl
+      - route: msa2-auth.kpaasta.io
+      - route: msa2-auth.cf.intl
