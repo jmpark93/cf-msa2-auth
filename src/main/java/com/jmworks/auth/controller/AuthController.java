@@ -55,7 +55,7 @@ public class AuthController {
     @Value("${s3.bucket}")
     String bucket;
 
-    @Value("${s3.endpoint}")
+    @Value("${s3.public}")
     String s3URL;
 
     @Autowired

@@ -12,5 +12,5 @@ applications:
     services:
       - msa2-auth
     routes:
-      - route: msa2-auth.kpaasta.io
+#      - route: msa2-auth.kpaasta.io
       - route: msa2-auth.cf.intl
